@@ -127,3 +127,4 @@ dist
 .pnp.*
 
 db_files/
+.vercel

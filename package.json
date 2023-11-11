@@ -4,7 +4,7 @@
   "description": "URL Shortener",
   "main": "NukeURL/index.js",
   "scripts": {
-    "start": "nodemon NukeURL/index.js",
+    "start": "node NukeURL/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Mrinank Bhowmick",

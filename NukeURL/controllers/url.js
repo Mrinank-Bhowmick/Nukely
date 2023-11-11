@@ -13,7 +13,12 @@ async function handleGenerateNewShortURL(req,res){
         visitHistory: [],
     }); 
 
-    return res.json({id: shortID});
+    return res.json(
+        {
+            id: shortID,
+            long_url: body.url,
+            short_url: `http://localhost:8080/${shortID}`
+        });
 }
 
 module.exports = {

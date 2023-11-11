@@ -42,6 +42,28 @@ app.use(cors());
 app.use('/url', urlRoute);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
+app.get('/', (req, res) => {
+  res.json({
+    message: 'Welcome to the Short URL API!',
+    endpoints: [
+      {
+        url: '/url',
+        method: 'POST',
+        description: 'Create a new short URL'
+      },
+      {
+        url: '/:shortID',
+        method: 'GET',
+        description: 'Redirect to the original URL'
+      },
+      {
+        url: '/api-docs',
+        method: 'GET',
+        description: 'View the Swagger UI documentation'
+      }
+    ]
+  });
+});
 
 
 /**
@@ -49,14 +71,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
  * /{shortID}:
  *   get:
  *     summary: Redirect to the original URL
- *     parameters:
- *       - in: path
- *         name: shortID
- *         required: true
- *         description: The short ID of the URL
- *     responses:
- *       302:
- *         description: Redirect to the original URL
+ *     description: This endpoint redirects to the original URL associated with the given short ID. Note that Swagger UI can't handle redirects, so you won't be able to test this endpoint directly in Swagger UI. For example, a request to `http://localhost:8080/jTW4Vjzvj` might redirect to `https://youtube.com`.
  */
 app.get("/:shortID",async (req,res)=>{
     const shortID = req.params.shortID;
@@ -73,7 +88,12 @@ app.get("/:shortID",async (req,res)=>{
     }
     );
     //console.log(entry);
-    res.redirect(entry.redirectURL);
+    if(entry){
+      res.redirect(entry.redirectURL);
+    }
+    else{
+      res.status(404).send("URL not found");
+    }
 });
 
 app.listen(PORT,() =>
