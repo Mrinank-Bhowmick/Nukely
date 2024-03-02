@@ -1,21 +1,17 @@
 {
   "name": "nukeurl",
   "version": "1.0.0",
-  "description": "URL Shortener",
-  "main": "NukeURL/index.js",
+  "description": "",
+  "main": "index.js",
   "scripts": {
-    "start": "node NukeURL/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Mrinank Bhowmick",
+  "author": "",
   "license": "ISC",
   "dependencies": {
-    "cors": "^2.8.5",
-    "express": "^4.18.2",
-    "mongoose": "^8.0.0",
-    "nodemon": "^3.0.1",
-    "shortid": "^2.2.16",
-    "swagger-jsdoc": "^6.2.8",
-    "swagger-ui-express": "^5.0.0"
+    "axios": "^1.6.7",
+    "express": "^4.18.3",
+    "mongoose": "^8.2.0",
+    "nodemon": "^3.1.0"
   }
 }
