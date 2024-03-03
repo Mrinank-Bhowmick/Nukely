@@ -13,11 +13,11 @@ async function getUUID(){
 async function handleGenerateNewShortURL(req,res){
     
     const body = req.body;
+    console.log(body);
     
     if(!body.url){
         return res.status(400).json({error: "Url is required"})
     }
-    console.log("Here")
     const shortid = await getUUID();
     console.log(shortid)
     
@@ -27,10 +27,21 @@ async function handleGenerateNewShortURL(req,res){
         visitHistory:[]
     })
 
-    return res.json({id : shortid})
+    return res.render('home',{
+        id:shortid
+    })
+}
+
+async function handleGetAnalytics(req,res){
+    const shortid = req.params.shortid;
+    const result = await URL.findOne({shortId:shortid})
+    return res.json({
+        totalClicks : result.visitHistory.length,
+        analyticsHistory : result.visitHistory
+    })
 }
 
 module.exports={
-    handleGenerateNewShortURL
+    handleGenerateNewShortURL,handleGetAnalytics
 }
 
