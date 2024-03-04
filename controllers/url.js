@@ -1,47 +1,33 @@
-const axios = require('axios')
-const URL = require("../models/url")
-async function getUUID(){
-    try{
-        const response = await axios.get("https://generator.bhowmickmrinank.workers.dev/uuid");
-        const uuid = response.data.uuid;
-        return uuid;
-    } catch (error){
-        console.error("Error while creating uuid",error);
-    }
+const shortid = require("shortid");
+const URL = require("../models/url");
+
+async function handleGenerateNewShortURL(req, res) {
+  const body = req.body;
+  if (!body.url) return res.status(400).json({ error: "url is required" });
+  const shortID = shortid();
+
+  await URL.create({
+    shortId: shortID,
+    redirectURL: body.url,
+    visitHistory: [],
+    createdBy: req.user._id,
+  });
+
+  return res.render("home", {
+    id: shortID,
+  });
 }
 
-async function handleGenerateNewShortURL(req,res){
-    
-    const body = req.body;
-    console.log(body);
-    
-    if(!body.url){
-        return res.status(400).json({error: "Url is required"})
-    }
-    const shortid = await getUUID();
-    console.log(shortid)
-    
-    await URL.create({
-        shortId: shortid,
-        redirectURL: body.url,
-        visitHistory:[]
-    })
-
-    return res.render('home',{
-        id:shortid
-    })
+async function handleGetAnalytics(req, res) {
+  const shortId = req.params.shortId;
+  const result = await URL.findOne({ shortId });
+  return res.json({
+    totalClicks: result.visitHistory.length,
+    analytics: result.visitHistory,
+  });
 }
 
-async function handleGetAnalytics(req,res){
-    const shortid = req.params.shortid;
-    const result = await URL.findOne({shortId:shortid})
-    return res.json({
-        totalClicks : result.visitHistory.length,
-        analyticsHistory : result.visitHistory
-    })
-}
-
-module.exports={
-    handleGenerateNewShortURL,handleGetAnalytics
-}
-
+module.exports = {
+  handleGenerateNewShortURL,
+  handleGetAnalytics,
+};
